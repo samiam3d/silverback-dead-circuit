@@ -2,17 +2,22 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#05030a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dead Circuit">
 <title>Silverback: Dead Circuit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Creepster&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#0b0610;--red:#ff2448;--cyan:#27e3ff;--yel:#ffd21f;--paper:#f3e9d2;--mag:#ff3ea5}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden;background:#05030a;font-family:'Bangers',Impact,sans-serif;color:var(--paper);user-select:none;-webkit-user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;touch-action:none;background:#05030a;font-family:'Bangers',Impact,sans-serif;color:var(--paper);user-select:none;-webkit-user-select:none}
 #gl{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
 .panel{background:var(--paper);color:var(--ink);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink)}
-#hud{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity .6s}
+#hud{position:fixed;top:env(safe-area-inset-top);right:env(safe-area-inset-right);bottom:env(safe-area-inset-bottom);left:env(safe-area-inset-left);pointer-events:none;opacity:0;transition:opacity .6s}
 #hud.on{opacity:1}
 #floorTag{position:absolute;left:22px;top:14px;font-size:14px;letter-spacing:3px;color:var(--paper);text-shadow:2px 2px 0 #000}
 #cap{position:absolute;left:18px;top:36px;max-width:420px;padding:8px 14px 9px;background:var(--yel);color:var(--ink);font-size:21px;letter-spacing:1px;transform:rotate(-1.2deg)}
@@ -76,6 +81,56 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05030a;font-family:
 .tip{font-size:14px;letter-spacing:2px;opacity:.6;margin-top:12px;position:relative}
 @media (max-width:1150px){#boss{top:118px;width:min(440px,calc(100% - 260px));left:18px;transform:none}#weap{bottom:132px}#cap{max-width:calc(100% - 240px)}}
 @media (max-width:760px){#mini{transform:scale(.6);transform-origin:top right}#vitals{width:240px}.slot{width:46px;height:46px;font-size:22px}.ab{width:54px}#boss{width:calc(100% - 36px)}}
+/* ---------- touch controls ---------- */
+#touch{position:fixed;inset:0;display:none;touch-action:none}
+body.touch #touch{display:block}
+.stick{position:absolute;width:132px;height:132px;margin:-66px 0 0 -66px;border-radius:50%;border:3px solid rgba(243,233,210,.55);background:radial-gradient(circle,rgba(243,233,210,.08),rgba(243,233,210,.02));box-shadow:0 0 0 3px rgba(0,0,0,.5);opacity:0;transition:opacity .15s;pointer-events:none}
+.stick.on{opacity:1}
+.stick i{position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:var(--paper);border:3px solid #000;box-shadow:3px 3px 0 #000}
+#stickR i{background:var(--red)}
+.stick.sprint i{background:var(--cyan)}
+#stickHintL,#stickHintR{position:absolute;bottom:22%;font-size:13px;letter-spacing:2px;color:rgba(243,233,210,.35);text-shadow:2px 2px 0 #000;pointer-events:none;transition:opacity .6s}
+#stickHintL{left:12%}#stickHintR{right:30%}
+body.touch #abil{right:12px;bottom:12px;width:250px;height:250px;display:block}
+body.touch .ab{position:absolute;width:66px;height:66px;border-radius:50%;padding-top:20px;font-size:14px;pointer-events:auto;touch-action:none}
+body.touch .ab small{display:none}
+body.touch .ab:active{transform:scale(.9)}
+body.touch #ab_dash{right:0;bottom:0;width:92px;height:92px;padding-top:33px;font-size:19px;background:var(--cyan)}
+body.touch #ab_roar{right:104px;bottom:4px}
+body.touch #ab_pound{right:88px;bottom:86px}
+body.touch #ab_rhino{right:14px;bottom:108px}
+body.touch #weap{bottom:10px;gap:5px}
+body.touch .slot{width:44px;height:44px;font-size:20px;pointer-events:auto;touch-action:none}
+body.touch .slot em{display:none}
+body.touch #vitals{width:210px;padding:6px 10px 4px;bottom:10px;left:10px}
+body.touch #vitals .bar{height:11px;margin:2px 0 5px}
+body.touch #vitals .lbl{font-size:13px}
+body.touch #cap{top:30px;left:10px;font-size:15px;max-width:min(330px,38vw);padding:5px 10px 6px}
+body.touch #cap small{font-size:11px}
+body.touch #floorTag{left:12px;top:10px;font-size:11px}
+body.touch #mini{transform:scale(.5);transform-origin:top right;right:10px;top:10px}
+body.touch #boss{top:8px;width:min(360px,34vw);left:50%;transform:translateX(-50%)}
+body.touch #boss .name{font-size:20px}
+body.touch #boss .bar{height:10px}
+body.touch #bossShield{font-size:10px}
+#sndBtn{position:absolute;right:12px;top:90px;width:40px;height:40px;font-size:20px;display:none;align-items:center;justify-content:center;pointer-events:auto;border-radius:50%}
+body.touch #sndBtn{display:flex}
+.ctrls.mob{display:none}
+body.touch .ctrls.desk{display:none}
+body.touch .ctrls.mob{display:grid}
+.screen{overflow:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+#story{touch-action:pan-y;-webkit-overflow-scrolling:touch}
+.tip .mob{display:none}body.touch .tip .desk{display:none}body.touch .tip .mob{display:inline}
+body.touch .cover{padding:18px 18px 16px}
+body.touch .cover p{font-size:13px;margin-bottom:10px}
+#rotateTip{display:none;font-size:15px;letter-spacing:2px;color:var(--yel);margin:0 0 12px;position:relative}
+@media (orientation:portrait){body.touch #rotateTip{display:block}
+  body.touch #abil{width:200px;height:200px}
+  body.touch #ab_roar{right:100px}
+  body.touch #weap{bottom:auto;top:142px;left:auto;right:10px;transform:none;flex-direction:column}
+  body.touch #boss{top:auto;bottom:118px;width:calc(100% - 24px)}
+  body.touch #cap{max-width:60vw}}
+@media (max-height:430px){body.touch .screen{align-items:flex-start;padding:10px 0}}
 #fade{position:fixed;inset:0;pointer-events:none;background:#000;opacity:0;transition:opacity .6s;z-index:15}
 #fade.on{opacity:1}
 
@@ -108,11 +163,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05030a;font-family:
 <div id="pops"></div>
 <div id="vig"></div>
 <div id="speed"></div>
+<div id="touch"><div class="stick" id="stickL"><i></i></div><div class="stick" id="stickR"><i></i></div><div id="stickHintL">DRAG: MOVE<br>PUSH FAR: SPRINT</div><div id="stickHintR">DRAG: AIM + FIRE<br>TAP: ATTACK</div></div>
 <div id="hud">
   <div id="floorTag">SUB-LEVEL 3</div>
   <div id="cap" class="panel"><span id="capT">...</span><small id="capS"></small></div>
   <div id="boss"><div class="name" id="bossName">HOLLOW-9</div><div class="bar" id="bossBar"><i id="bossHp"></i></div><div id="bossShield"></div></div>
   <canvas id="mini"></canvas>
+  <div id="sndBtn" class="panel">🔊</div>
   <div id="vitals" class="panel">
     <div class="lbl"><span>SILVERBACK</span><span id="keys"><i class="key" id="k_red"></i><i class="key" id="k_blue"></i><i class="key" id="k_yellow"></i></span></div>
     <div class="bar" id="hp"><i id="hpI"></i></div>
@@ -136,13 +193,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05030a;font-family:
     <h1>SILVERBACK</h1>
     <h2>&mdash; DEAD CIRCUIT &mdash;</h2>
     <p>Midnight at the Kessler Robotics lab. The power is failing. You broke out of your cage&hellip; and so did the machines they trained to hunt you. Free the other animals. Climb three sub-levels. Don't let them catch you in the dark.</p>
-    <div class="ctrls">
+    <div class="ctrls desk">
       <div><b>WASD</b> MOVE</div><div><b>MOUSE</b> AIM</div><div><b>CLICK</b> ATTACK / FIRE</div>
       <div><b>HOLD R-CLICK</b> SPRINT</div><div><b>TAP R-CLICK</b> DASH</div><div><b>SPACE</b> ROAR (STUN)</div>
       <div><b>F</b> GROUND POUND</div><div><b>R</b> RHINO</div><div><b>1-5 / WHEEL</b> WEAPONS</div>
     </div>
+    <div class="ctrls mob">
+      <div><b>LEFT THUMB</b> MOVE (PUSH FAR = SPRINT)</div><div><b>RIGHT THUMB</b> AIM + FIRE</div>
+      <div><b>DASH / ROAR / POUND</b> BUTTONS</div><div><b>TAP WEAPONS</b> TO SWITCH</div>
+    </div>
+    <div id="rotateTip">↻ TURN YOUR PHONE SIDEWAYS FOR THE BEST VIEW</div>
     <div class="btn" id="startBtn">ENTER THE LAB</div>
-    <div class="tip">HEADPHONES RECOMMENDED &bull; LIGHTS OFF IF YOU DARE &bull; M = MUSIC &bull; N = ALL SOUND</div>
+    <div class="tip">HEADPHONES RECOMMENDED &bull; LIGHTS OFF IF YOU DARE<span class="desk"> &bull; M = MUSIC &bull; N = ALL SOUND</span><span class="mob"> &bull; TURN OFF SILENT MODE FOR SOUND</span></div>
   </div>
 </div>
 <div class="screen hide" id="endScreen">
@@ -162,6 +224,10 @@ const rand = (a, b) => a + Math.random() * (b - a);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const hex = c => '#' + c.toString(16).padStart(6, '0');
+// touch devices get twin-stick controls and a lighter renderer (add ?touch=1 to force it on)
+const TOUCH = /[?&]touch=1/.test(location.search) || (matchMedia('(pointer: coarse)').matches && navigator.maxTouchPoints > 0);
+if (TOUCH) document.body.classList.add('touch');
+const UIS = () => clamp(Math.min(innerWidth, innerHeight * 1.6) / 1100, 0.55, 1);
 
 // ================================================================ FLOORS
 // # wall  . floor  R/B/Y doors  r/b/y keys  W wrench  H hammer  G blaster  M mega cannon  D dash boots
@@ -542,7 +608,7 @@ function scareSound(kind) {
 // ================================================================ RENDERER + COMIC POST FX
 const canvas = $('gl');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
-const PR = Math.min(devicePixelRatio || 1, 2);
+const PR = Math.min(devicePixelRatio || 1, TOUCH ? 1.5 : 2);
 renderer.setPixelRatio(PR);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -957,7 +1023,7 @@ scene.add(shieldMesh);
 const hemi = new THREE.HemisphereLight(0x5a4a8a, 0x100818, 0.38); scene.add(hemi);
 const moon = new THREE.DirectionalLight(0x6a7cff, 0.25); moon.position.set(-20, 40, 10); scene.add(moon);
 const spot = new THREE.SpotLight(0xfff0d0, 2.6, 36, 0.58, 0.55, 1.2);
-spot.castShadow = true; spot.shadow.mapSize.set(1024, 1024); spot.shadow.camera.near = 0.5; spot.shadow.camera.far = 44; spot.shadow.bias = -0.0008;
+spot.castShadow = true; spot.shadow.mapSize.set(TOUCH ? 512 : 1024, TOUCH ? 512 : 1024); spot.shadow.camera.near = 0.5; spot.shadow.camera.far = 44; spot.shadow.bias = -0.0008;
 scene.add(spot, spot.target);
 const aura = new THREE.PointLight(0xffc890, 0.8, 10, 1.5); scene.add(aura);
 const under = new THREE.Mesh(new THREE.PlaneGeometry(600, 600), new THREE.MeshBasicMaterial({ color: 0x040208 }));
@@ -1062,7 +1128,7 @@ function buildLevel(i) {
   }
   // hanging lamps
   let n = 0;
-  for (const z0 of [2, 9, 18]) for (const x0 of [5, 14, 23]) {
+  for (const z0 of TOUCH ? [3, 17] : [2, 9, 18]) for (const x0 of TOUCH ? [6, 14, 22] : [5, 14, 23]) {
     let spotT = null;
     for (let r = 0; r < 3 && !spotT; r++) for (let dz = -r; dz <= r && !spotT; dz++) for (let dx = -r; dx <= r && !spotT; dx++) {
       const x = x0 + dx, z = z0 + dz; if (!solid(x, z) && grid[z][x] === '.') spotT = [x, z];
@@ -1150,7 +1216,7 @@ function objective() {
 const popsEl = $('pops'); const pops = [];
 function pop(text, pos, color = '#ffd21f', size = 34, life = 0.9, say = false) {
   const el = document.createElement('div'); el.className = 'pop' + (say ? ' say' : ''); el.textContent = text;
-  el.style.color = color; el.style.fontSize = size + 'px'; popsEl.appendChild(el);
+  el.style.color = color; el.style.fontSize = Math.round(size * UIS()) + 'px'; popsEl.appendChild(el);
   pops.push({ el, pos: pos.clone(), t: 0, life });
 }
 const say = (text, pos, life = 2.4) => pop(text, pos, '#000', 18, life, true);
@@ -1234,6 +1300,62 @@ function equip(w) {
     sock.add(heldModel);
   }
   weapList.forEach(x => { $('s_' + x).classList.toggle('sel', x === w); $('s_' + x).classList.toggle('own', !!player.inv[x]); });
+}
+
+
+// ================================================================ TOUCH (twin-stick)
+const sticks = { L: { id: null, x: 0, y: 0, ox: 0, oy: 0, t: 0, el: $('stickL') }, R: { id: null, x: 0, y: 0, ox: 0, oy: 0, t: 0, el: $('stickR') } };
+let touchFire = false, touchTap = 0;
+function assistAim(a, cone = 0.45) {
+  // snap toward the hunter (or a live generator) if it's visible and roughly where you're pointing
+  let best = a, bd = cone;
+  const cands = [];
+  if (!robot.dead && robot.state !== 'dormant' && robot.pos.distanceTo(player.pos) < 30 && los(player.pos, robot.pos)) cands.push(robot.pos);
+  for (const g of gens) if (g.alive && g.pos.distanceTo(player.pos) < 22 && los(player.pos, g.pos)) cands.push(g.pos);
+  for (const c of cands) { const ta = Math.atan2(c.x - player.pos.x, c.z - player.pos.z); let d = Math.abs(Math.atan2(Math.sin(ta - a), Math.cos(ta - a))); if (d < bd) { bd = d; best = ta; } }
+  return best;
+}
+if (TOUCH) {
+  const layer = $('touch'), RAD = 58;
+  const which = id => sticks.L.id === id ? sticks.L : sticks.R.id === id ? sticks.R : null;
+  layer.addEventListener('pointerdown', e => {
+    if (state !== 'play') return;
+    e.preventDefault();
+    const s = e.clientX < innerWidth * 0.5 ? sticks.L : sticks.R;
+    if (s.id !== null) return;
+    s.id = e.pointerId; s.ox = e.clientX; s.oy = e.clientY; s.x = s.y = 0; s.t = performance.now(); s.moved = 0;
+    s.el.style.left = s.ox + 'px'; s.el.style.top = s.oy + 'px'; s.el.classList.add('on'); s.el.firstChild.style.transform = '';
+    try { layer.setPointerCapture(e.pointerId); } catch (_) {}
+    $('stickHintL').style.opacity = $('stickHintR').style.opacity = 0;
+  });
+  layer.addEventListener('pointermove', e => {
+    const s = which(e.pointerId); if (!s) return;
+    e.preventDefault();
+    let dx = e.clientX - s.ox, dy = e.clientY - s.oy; const d = Math.hypot(dx, dy);
+    s.moved = Math.max(s.moved, d);
+    if (d > RAD) {
+      // the base follows your thumb if you drag past the edge
+      const k = (d - RAD) / d; s.ox += dx * k; s.oy += dy * k; dx = e.clientX - s.ox; dy = e.clientY - s.oy;
+      s.el.style.left = s.ox + 'px'; s.el.style.top = s.oy + 'px';
+    }
+    s.x = dx / RAD; s.y = dy / RAD;
+    s.el.firstChild.style.transform = `translate(${dx}px,${dy}px)`;
+  });
+  const end = e => {
+    const s = which(e.pointerId); if (!s) return;
+    if (s === sticks.R && performance.now() - s.t < 220 && s.moved < 18 && state === 'play') {
+      // quick tap on the right side = one attack
+      if (player.weapon === 'mega') { if (player.cd <= 0) { player.charge = 0.25; fireMega(); } } else touchTap = 0.12;
+    }
+    s.id = null; s.x = s.y = 0; s.el.classList.remove('on');
+  };
+  layer.addEventListener('pointerup', end); layer.addEventListener('pointercancel', end);
+  const act = { ab_roar: () => roar(), ab_pound: () => groundPound(), ab_dash: () => dash(), ab_rhino: () => rhinoCharge() };
+  for (const id in act) $(id).addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); if (state === 'play') act[id](); });
+  weapList.forEach(w => $('s_' + w).addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); if (state === 'play' && player.inv[w]) equip(w); }));
+  $('sndBtn').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); if (!AC) return; const m = Amb.toggleAll(); $('sndBtn').textContent = m ? '🔇' : '🔊'; });
+  document.addEventListener('gesturestart', e => e.preventDefault());
+  addEventListener('blur', () => { for (const k of ['L', 'R']) { sticks[k].id = null; sticks[k].x = sticks[k].y = 0; sticks[k].el.classList.remove('on'); } });
 }
 
 // ================================================================ FLOW FIELD (boss pathing)
@@ -1417,6 +1539,7 @@ function toNextFloor() {
 }
 $('startBtn').onclick = () => {
   initAudio(); SFX.click(); $('title').classList.add('hide');
+  if (TOUCH) { try { const r = document.documentElement.requestFullscreen?.({ navigationUI: 'hide' }); r && r.then(() => screen.orientation?.lock?.('landscape').catch(() => {})).catch(() => {}); } catch (_) {} }
   showStory(0, () => startLevel(0));
 };
 
@@ -1478,6 +1601,7 @@ function groundPound() {
 function dash() {
   if (player.dashCd > 0) return;
   const inp = new THREE.Vector3((keys.KeyD ? 1 : 0) - (keys.KeyA ? 1 : 0), 0, (keys.KeyS ? 1 : 0) - (keys.KeyW ? 1 : 0));
+  if (sticks.L.id !== null && Math.hypot(sticks.L.x, sticks.L.y) > 0.2) inp.set(sticks.L.x, 0, sticks.L.y);
   if (inp.lengthSq() === 0) inp.copy(fwdVec());
   player.dashDir.copy(inp.normalize()); player.dashT = player.boots ? 0.24 : 0.18; player.dashCd = 2; SFX.whoosh();
   pop('ZOOM!', player.pos.clone().setY(3.5), '#27e3ff', 28);
@@ -1570,9 +1694,12 @@ function openDoor(d) {
 const tmpV = new THREE.Vector3();
 function updatePlayer(dt) {
   const inp = new THREE.Vector3((keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0), 0, (keys.KeyS || keys.ArrowDown ? 1 : 0) - (keys.KeyW || keys.ArrowUp ? 1 : 0));
+  const L = sticks.L, Rs = sticks.R, lLen = Math.hypot(L.x, L.y);
+  if (L.id !== null && lLen > 0.15) inp.set(L.x, 0, L.y);
   const moving = inp.lengthSq() > 0; if (moving) inp.normalize();
   const rmbSprint = rmbDown && performance.now() - rmbT >= RMB_TAP;
-  const sprint = (keys.ShiftLeft || keys.ShiftRight || rmbSprint) && moving && player.st > 0;
+  const sprint = (keys.ShiftLeft || keys.ShiftRight || rmbSprint || (L.id !== null && lLen > 0.92)) && moving && player.st > 0;
+  sticks.L.el.classList.toggle('sprint', L.id !== null && lLen > 0.92);
   player.st = clamp(player.st + (sprint ? -32 : 18) * dt, 0, 100);
   player.vel.lerp(inp.multiplyScalar(sprint ? 11 : 7), 1 - Math.exp(-dt * 14));
   let v = player.vel.clone().add(player.kb);
@@ -1580,11 +1707,19 @@ function updatePlayer(dt) {
   player.kb.multiplyScalar(Math.exp(-dt * 6));
   const steps = Math.ceil(v.length() * dt / 0.4) || 1;
   for (let i = 0; i < steps; i++) { player.pos.addScaledVector(v, dt / steps); pushCircles(player.pos, 1.1); collide(player.pos, 1.1); }
-  ray.setFromCamera(mouse, camera);
-  if (ray.ray.intersectPlane(aimPlane, aimPt)) {
-    const want = Math.atan2(aimPt.x - player.pos.x, aimPt.z - player.pos.z);
-    let dA = want - player.face; dA = Math.atan2(Math.sin(dA), Math.cos(dA)); player.face += dA * (1 - Math.exp(-dt * 18));
+  let want = null;
+  if (!TOUCH) {
+    ray.setFromCamera(mouse, camera);
+    if (ray.ray.intersectPlane(aimPlane, aimPt)) want = Math.atan2(aimPt.x - player.pos.x, aimPt.z - player.pos.z);
+  } else {
+    // right stick aims (with a little aim assist); otherwise face where you're walking
+    const rLen = Math.hypot(Rs.x, Rs.y);
+    if (Rs.id !== null && rLen > 0.25) { want = assistAim(Math.atan2(Rs.x, Rs.y)); touchFire = rLen > 0.35; }
+    else { touchFire = false; if (moving) want = Math.atan2(inp.x, inp.z); }
+    mouseDown = touchFire || touchTap > 0;
+    if (touchTap > 0) { touchTap -= dt; if (Rs.id === null) want = assistAim(player.face, 1.2); }
   }
+  if (want !== null) { let dA = want - player.face; dA = Math.atan2(Math.sin(dA), Math.cos(dA)); player.face += dA * (1 - Math.exp(-dt * (TOUCH ? 24 : 18))); }
   player.cd -= dt; player.roarCd -= dt; player.poundCd -= dt; player.dashCd -= dt; player.rhinoCd -= dt; player.inv_t -= dt; player.hurtT -= dt;
   if (player.weapon === 'mega') {
     if (mouseDown && player.cd <= 0) { if (player.charge === 0) SFX.charge(); player.charge += dt; if (Math.random() < 0.5) burst(gorilla.userData.arms[1].socket.getWorldPosition(new THREE.Vector3()), 0xff7a1f, 1, 3, 0.3); }
@@ -2118,7 +2253,8 @@ function frame(now) {
     spot.position.set(player.pos.x, 3.6, player.pos.z); spot.target.position.set(player.pos.x + 6, 0, player.pos.z + 6); aura.position.set(player.pos.x, 4, player.pos.z);
   }
   const target = tmpV.copy(player.pos);
-  const want = new THREE.Vector3(target.x, 23, target.z + 16);
+  const asp = innerWidth / innerHeight, zoom = asp < 1 ? 1 + (1 - asp) * 0.9 : asp < 1.4 ? 1.08 : 1;
+  const want = new THREE.Vector3(target.x, 23 * zoom, target.z + 16 * zoom);
   if (!camInit) { camPos.copy(want); camInit = true; }
   camPos.lerp(want, 1 - Math.exp(-dt * 6));
   camera.position.copy(camPos);

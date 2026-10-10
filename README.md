@@ -25,6 +25,21 @@ python3 -m http.server 8000
 | 1-5 / wheel | Switch weapons |
 | M / N | Toggle music / all sound |
 
+## Mobile
+
+Touch devices get twin-stick controls automatically. Landscape is best, but portrait works too.
+
+| Touch | Action |
+|---|---|
+| Left thumb, drag anywhere on the left half | Move. Push to the edge to sprint |
+| Right thumb, drag anywhere on the right half | Aim and fire, with a little aim assist toward the hunter and generators |
+| Right thumb, quick tap | Single attack |
+| DASH / ROAR / POUND / RHINO buttons | Abilities |
+| Weapon icons | Tap to switch |
+| 🔊 | Sound on/off |
+
+On iPhone, turn off silent mode to hear the audio. You can use "Add to Home Screen" to play it full-screen like an app.
+
 ## Floors
 
 | Floor | Hunter | What you do |
