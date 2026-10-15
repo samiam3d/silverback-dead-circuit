@@ -4,7 +4,9 @@ A horror comic-book escape game made with Three.js. You play an escaped lab gori
 
 ## Play
 
-Open `index.html` in a browser. It's a single file that loads Three.js and fonts from a CDN. Or serve it locally:
+**Play online: https://games.samiam3d.com/silverback-dead-circuit/**
+
+Or open `index.html` in a browser. It's a single file that loads Three.js and fonts from a CDN. Or serve it locally:
 
 ```bash
 python3 -m http.server 8000
