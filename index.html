@@ -10,16 +10,16 @@
 <meta name="apple-mobile-web-app-title" content="Dead Circuit">
 <title>Silverback: Dead Circuit</title>
 <meta name="description" content="A horror comic-book escape game. Play as an escaped lab gorilla, free the other animals, and survive three robot hunters in the dark. Free in your browser, desktop or mobile.">
-<link rel="canonical" href="https://games.samiam3d.com/silverback-dead-circuit/">
+<link rel="canonical" href="https://samiam3d.github.io/silverback-dead-circuit/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Silverback: Dead Circuit">
 <meta property="og:description" content="Escape the lab. Free the animals. Don't get caught in the dark. A free horror comic game for desktop and mobile.">
-<meta property="og:url" content="https://games.samiam3d.com/silverback-dead-circuit/">
-<meta property="og:image" content="https://games.samiam3d.com/silverback-dead-circuit/cover.jpg">
+<meta property="og:url" content="https://samiam3d.github.io/silverback-dead-circuit/">
+<meta property="og:image" content="https://samiam3d.github.io/silverback-dead-circuit/cover.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://games.samiam3d.com/silverback-dead-circuit/cover.jpg">
+<meta name="twitter:image" content="https://samiam3d.github.io/silverback-dead-circuit/cover.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Creepster&display=swap" rel="stylesheet">
 <style>
@@ -90,6 +90,8 @@ html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none;-webki
 .btn:hover{transform:translate(-2px,-2px) rotate(-2deg);box-shadow:8px 8px 0 #000}
 .btn.ghost{background:transparent;font-size:20px;padding:6px 16px;margin-left:10px}
 .tip{font-size:14px;letter-spacing:2px;opacity:.6;margin-top:12px;position:relative}
+.more{display:inline-block;margin-top:12px;font-size:16px;letter-spacing:2px;color:var(--cyan);text-decoration:none;border-bottom:2px solid var(--cyan);position:relative}
+.more:hover{color:var(--yel);border-color:var(--yel)}
 @media (max-width:1150px){#boss{top:118px;width:min(440px,calc(100% - 260px));left:18px;transform:none}#weap{bottom:132px}#cap{max-width:calc(100% - 240px)}}
 @media (max-width:760px){#mini{transform:scale(.6);transform-origin:top right}#vitals{width:240px}.slot{width:46px;height:46px;font-size:22px}.ab{width:54px}#boss{width:calc(100% - 36px)}}
 /* ---------- touch controls ---------- */
@@ -216,6 +218,7 @@ body.touch .cover p{font-size:13px;margin-bottom:10px}
     <div id="rotateTip">↻ TURN YOUR PHONE SIDEWAYS FOR THE BEST VIEW</div>
     <div class="btn" id="startBtn">ENTER THE LAB</div>
     <div class="tip">HEADPHONES RECOMMENDED &bull; LIGHTS OFF IF YOU DARE<span class="desk"> &bull; M = MUSIC &bull; N = ALL SOUND</span><span class="mob"> &bull; TURN OFF SILENT MODE FOR SOUND</span></div>
+    <a class="more" href="https://samiam3d.com/games">&larr; MORE GAMES BY SAMIAM3D</a>
   </div>
 </div>
 <div class="screen hide" id="endScreen">
@@ -223,7 +226,8 @@ body.touch .cover p{font-size:13px;margin-bottom:10px}
     <h1 id="endT">YOU DIED</h1>
     <h2 id="endS">HOLLOW-9 FOUND YOU</h2>
     <p id="endP"></p>
-    <div class="btn" id="againBtn">TRY AGAIN</div>
+    <div class="btn" id="againBtn">TRY AGAIN</div><br>
+    <a class="more" href="https://samiam3d.com/games">&larr; MORE GAMES</a>
   </div>
 </div>
 
