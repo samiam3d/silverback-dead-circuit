@@ -1,6 +1,6 @@
 // Silverback: Dead Circuit service worker: makes the game installable and playable offline.
 // Bump CACHE when shipping a new version so old caches get cleared.
-const CACHE = 'dead-circuit-v1';
+const CACHE = 'dead-circuit-v2-audio-lifecycle';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './cover.jpg'];
 
 self.addEventListener('install', e => {
@@ -10,7 +10,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('dead-circuit-') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });

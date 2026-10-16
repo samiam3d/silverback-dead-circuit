@@ -10,16 +10,16 @@
 <meta name="apple-mobile-web-app-title" content="Dead Circuit">
 <title>Silverback: Dead Circuit</title>
 <meta name="description" content="A horror comic-book escape game. Play as an escaped lab gorilla, free the other animals, and survive three robot hunters in the dark. Free in your browser, desktop or mobile.">
-<link rel="canonical" href="https://samiam3d.github.io/silverback-dead-circuit/">
+<link rel="canonical" href="https://samiam3d.com/silverback-dead-circuit/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Silverback: Dead Circuit">
 <meta property="og:description" content="Escape the lab. Free the animals. Don't get caught in the dark. A free horror comic game for desktop and mobile.">
-<meta property="og:url" content="https://samiam3d.github.io/silverback-dead-circuit/">
-<meta property="og:image" content="https://samiam3d.github.io/silverback-dead-circuit/cover.jpg">
+<meta property="og:url" content="https://samiam3d.com/silverback-dead-circuit/">
+<meta property="og:image" content="https://samiam3d.com/silverback-dead-circuit/cover.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://samiam3d.github.io/silverback-dead-circuit/cover.jpg">
+<meta name="twitter:image" content="https://samiam3d.com/silverback-dead-circuit/cover.jpg">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -404,6 +404,41 @@ function los(a, b, r = 0) {
 
 // ================================================================ AUDIO
 let AC = null, master, noiseBuf;
+// Pause every audio source when the game is hidden or loses focus. Web Audio
+// oscillators otherwise keep playing independently of the render loop.
+let audioWindowFocused = document.hasFocus(), audioPageLeaving = false;
+let audioStateChange = Promise.resolve();
+function syncAudioActivity() {
+  if (!AC || AC.state === 'closed') return;
+  const context = AC;
+  // Serialize rapid blur/focus changes so an older suspend cannot win a race.
+  audioStateChange = audioStateChange.catch(() => {}).then(() => {
+    if (context.state === 'closed') return;
+    const active = audioWindowFocused && !audioPageLeaving && !document.hidden;
+    return active ? context.resume() : context.suspend();
+  }).catch(() => {});
+}
+function stopAudio() {
+  audioPageLeaving = true;
+  Music.stop();
+  if (AC && AC.state !== 'closed') {
+    master.disconnect();
+    void AC.close().catch(() => {});
+  }
+}
+addEventListener('blur', () => { audioWindowFocused = false; syncAudioActivity(); });
+addEventListener('focus', () => { audioWindowFocused = true; syncAudioActivity(); });
+document.addEventListener('visibilitychange', syncAudioActivity);
+addEventListener('pagehide', event => {
+  audioPageLeaving = true;
+  if (event.persisted) syncAudioActivity();
+  else stopAudio();
+});
+addEventListener('pageshow', () => {
+  audioPageLeaving = false;
+  audioWindowFocused = document.hasFocus();
+  syncAudioActivity();
+});
 function initAudio() {
   if (AC) return;
   AC = new (window.AudioContext || window.webkitAudioContext)();
@@ -416,16 +451,17 @@ function initAudio() {
   const bf = AC.createBiquadFilter(); bf.type = 'lowpass'; bf.frequency.value = 260;
   const ng = AC.createGain(); ng.gain.value = 0.05; n.connect(bf).connect(ng).connect(master); n.start();
   Music.init(); Amb.init();
+  syncAudioActivity();
 }
 function env(g, t, a, peak, dec) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(peak, 0.0002), t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + dec); }
 function tone(type, f0, f1, dur, vol, delay = 0) {
-  if (!AC || vol < 0.002) return; const t = AC.currentTime + delay;
+  if (!AC || AC.state !== 'running' || vol < 0.002) return; const t = AC.currentTime + delay;
   const o = AC.createOscillator(), g = AC.createGain(); o.type = type;
   o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(f1, 1), t + dur);
   env(g, t, 0.005, vol, dur); o.connect(g).connect(master); o.start(t); o.stop(t + dur + 0.05);
 }
 function noise(dur, vol, freq = 1000, q = 1, type = 'bandpass', delay = 0, f1) {
-  if (!AC || vol < 0.002) return; const t = AC.currentTime + delay;
+  if (!AC || AC.state !== 'running' || vol < 0.002) return; const t = AC.currentTime + delay;
   const s = AC.createBufferSource(); s.buffer = noiseBuf;
   const f = AC.createBiquadFilter(); f.type = type; f.frequency.setValueAtTime(freq, t);
   if (f1) f.frequency.exponentialRampToValueAtTime(f1, t + dur); f.Q.value = q;
@@ -509,7 +545,7 @@ const Music = (() => {
     s.connect(f).connect(g).connect(dest); s.start(t, Math.random()); s.stop(t + 0.3);
   }
   function sched() {
-    if (!song) return;
+    if (!song || !AC || AC.state !== 'running') return;
     const sp = 60 / song.bpm / 4;
     while (nextT < AC.currentTime + 0.12) { play(step, nextT, sp); nextT += sp; step++; }
   }
@@ -562,6 +598,7 @@ const Music = (() => {
     duck(sec) { if (!bus) return; const now = AC.currentTime; duckEnd = now + sec; dreadOn = null; bus.gain.cancelScheduledValues(now); bus.gain.setValueAtTime(0.0001, now); bus.gain.setTargetAtTime(muted ? 0 : 0.55, now + sec, 0.6); },
     // the music drops out entirely when something is close but unseen
     dread(on) { if (!bus || muted || AC.currentTime < duckEnd || on === dreadOn) return; dreadOn = on; bus.gain.setTargetAtTime(on ? 0.04 : 0.55, AC.currentTime, on ? 0.35 : 1.0); },
+    stop() { clearInterval(timer); timer = null; song = null; },
     toggle() { muted = !muted; if (bus) bus.gain.setTargetAtTime(muted ? 0 : 0.55, AC.currentTime, 0.1); return muted; },
   };
 })();

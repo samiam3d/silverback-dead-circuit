@@ -4,7 +4,7 @@ A horror comic-book escape game made with Three.js. You play an escaped lab gori
 
 ## Play
 
-**Play online: https://samiam3d.github.io/silverback-dead-circuit/**
+**Play online: https://samiam3d.com/silverback-dead-circuit/**
 
 More games: https://samiam3d.com/games
 
@@ -89,3 +89,5 @@ Everything is synthesized live with Web Audio. There are no audio files.
 ## Art style
 
 Toon shading with ink outlines from depth creases, halftone dots, cross-hatched shadows, and Spider-Verse-style color misregistration that gets stronger out of focus.
+
+Audio automatically suspends when the game loses focus or is hidden, resumes when you return, and closes when leaving the page. Music/all-sound mute preferences remain unchanged.
