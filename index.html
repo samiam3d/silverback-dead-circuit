@@ -20,6 +20,9 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://samiam3d.github.io/silverback-dead-circuit/cover.jpg">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Creepster&display=swap" rel="stylesheet">
 <style>
@@ -53,7 +56,21 @@ html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none;-webki
 .slot em{position:absolute;bottom:1px;left:0;right:0;text-align:center;font-style:normal;font-size:11px;letter-spacing:1px}
 #abil{position:absolute;right:18px;bottom:18px;display:flex;gap:8px}
 .ab{width:66px;height:58px;position:relative;overflow:hidden;font-size:14px;text-align:center;padding-top:7px;letter-spacing:1px;line-height:1.05}
-.ab .cd{position:absolute;left:0;right:0;bottom:0;background:rgba(11,6,16,.75);height:0}
+.ab .cd{position:absolute;inset:0;background:conic-gradient(rgba(11,6,16,.8) calc(var(--p,0) * 1turn),transparent 0);pointer-events:none}
+.ab .t{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;-webkit-text-stroke:1px #000;text-shadow:2px 2px 0 #000;pointer-events:none;letter-spacing:0}
+.ab.ready{animation:abReady .45s ease-out}
+@keyframes abReady{0%{transform:scale(1);box-shadow:0 0 0 0 var(--yel)}40%{transform:scale(1.15);box-shadow:0 0 0 8px var(--yel)}100%{transform:scale(1);box-shadow:5px 5px 0 var(--ink)}}
+#ab_sprint{background:#d9f7ff}
+#ab_sprint.winded{background:#ff9aa8}
+#ab_sprint.on{background:var(--yel)}
+#corner{position:absolute;right:18px;top:168px;display:flex;flex-direction:column;gap:8px}
+.cbtn{width:42px;height:42px;font-size:20px;display:flex;align-items:center;justify-content:center;pointer-events:auto;cursor:pointer;border-radius:50%;user-select:none}
+.cbtn:active{transform:scale(.9)}
+.cbtn.hide{display:none}
+#installBtn,#fsTitleBtn{display:none}
+#installBtn.show,#fsTitleBtn.show{display:inline-block}
+#iosTip{display:none;font-size:14px;letter-spacing:1px;color:var(--cyan);margin-top:10px;position:relative}
+#iosTip.show{display:block}
 .ab.lock{opacity:.25}
 .ab small{display:block;font-size:11px;opacity:.7}
 #boss{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:440px;max-width:60vw;text-align:center;opacity:0;transition:opacity .5s}
@@ -109,9 +126,13 @@ body.touch .ab{position:absolute;width:66px;height:66px;border-radius:50%;paddin
 body.touch .ab small{display:none}
 body.touch .ab:active{transform:scale(.9)}
 body.touch #ab_dash{right:0;bottom:0;width:92px;height:92px;padding-top:33px;font-size:19px;background:var(--cyan)}
-body.touch #ab_roar{right:104px;bottom:4px}
-body.touch #ab_pound{right:88px;bottom:86px}
-body.touch #ab_rhino{right:14px;bottom:108px}
+body.touch #ab_dash .t{font-size:30px}
+body.touch #ab_sprint{right:128px;bottom:13px}
+body.touch #ab_roar{right:113px;bottom:71px}
+body.touch #ab_pound{right:71px;bottom:113px}
+body.touch #ab_rhino{right:13px;bottom:128px}
+body.touch #corner{right:10px;top:80px}
+body.touch .cbtn{width:40px;height:40px}
 body.touch #weap{bottom:10px;gap:5px}
 body.touch .slot{width:44px;height:44px;font-size:20px;pointer-events:auto;touch-action:none}
 body.touch .slot em{display:none}
@@ -126,8 +147,6 @@ body.touch #boss{top:8px;width:min(360px,34vw);left:50%;transform:translateX(-50
 body.touch #boss .name{font-size:20px}
 body.touch #boss .bar{height:10px}
 body.touch #bossShield{font-size:10px}
-#sndBtn{position:absolute;right:12px;top:90px;width:40px;height:40px;font-size:20px;display:none;align-items:center;justify-content:center;pointer-events:auto;border-radius:50%}
-body.touch #sndBtn{display:flex}
 .ctrls.mob{display:none}
 body.touch .ctrls.desk{display:none}
 body.touch .ctrls.mob{display:grid}
@@ -139,8 +158,7 @@ body.touch .cover p{font-size:13px;margin-bottom:10px}
 #rotateTip{display:none;font-size:15px;letter-spacing:2px;color:var(--yel);margin:0 0 12px;position:relative}
 @media (orientation:portrait){body.touch #rotateTip{display:block}
   body.touch #abil{width:200px;height:200px}
-  body.touch #ab_roar{right:100px}
-  body.touch #weap{bottom:auto;top:142px;left:auto;right:10px;transform:none;flex-direction:column}
+  body.touch #weap{bottom:auto;top:178px;left:auto;right:10px;transform:none;flex-direction:column}
   body.touch #boss{top:auto;bottom:118px;width:calc(100% - 24px)}
   body.touch #cap{max-width:60vw}}
 @media (max-height:430px){body.touch .screen{align-items:flex-start;padding:10px 0}}
@@ -182,7 +200,7 @@ body.touch .cover p{font-size:13px;margin-bottom:10px}
   <div id="cap" class="panel"><span id="capT">...</span><small id="capS"></small></div>
   <div id="boss"><div class="name" id="bossName">HOLLOW-9</div><div class="bar" id="bossBar"><i id="bossHp"></i></div><div id="bossShield"></div></div>
   <canvas id="mini"></canvas>
-  <div id="sndBtn" class="panel">🔊</div>
+  <div id="corner"><div id="fsBtn" class="panel cbtn" title="Full screen">⛶</div><div id="sndBtn" class="panel cbtn" title="Sound on/off">🔊</div></div>
   <div id="vitals" class="panel">
     <div class="lbl"><span>SILVERBACK</span><span id="keys"><i class="key" id="k_red"></i><i class="key" id="k_blue"></i><i class="key" id="k_yellow"></i></span></div>
     <div class="bar" id="hp"><i id="hpI"></i></div>
@@ -191,10 +209,11 @@ body.touch .cover p{font-size:13px;margin-bottom:10px}
   </div>
   <div id="weap"></div>
   <div id="abil">
-    <div class="ab panel" id="ab_roar">ROAR<small>SPACE</small><div class="cd"></div></div>
-    <div class="ab panel lock" id="ab_pound">POUND<small>F</small><div class="cd"></div></div>
-    <div class="ab panel" id="ab_dash">DASH<small>R-TAP / Q</small><div class="cd"></div></div>
-    <div class="ab panel lock" id="ab_rhino">RHINO<small>R</small><div class="cd"></div></div>
+    <div class="ab panel" id="ab_roar">ROAR<small>SPACE</small><div class="cd"></div><b class="t"></b></div>
+    <div class="ab panel lock" id="ab_pound">POUND<small>F</small><div class="cd"></div><b class="t"></b></div>
+    <div class="ab panel" id="ab_dash">DASH<small>R-TAP / Q</small><div class="cd"></div><b class="t"></b></div>
+    <div class="ab panel" id="ab_sprint">SPRINT<small>SHIFT / R-HOLD</small><div class="cd"></div><b class="t"></b></div>
+    <div class="ab panel lock" id="ab_rhino">RHINO<small>R</small><div class="cd"></div><b class="t"></b></div>
   </div>
 </div>
 <div id="scare"><span>SKREEEE!</span></div>
@@ -208,15 +227,18 @@ body.touch .cover p{font-size:13px;margin-bottom:10px}
     <p>Midnight at the Kessler Robotics lab. The power is failing. You broke out of your cage&hellip; and so did the machines they trained to hunt you. Free the other animals. Climb three sub-levels. Don't let them catch you in the dark.</p>
     <div class="ctrls desk">
       <div><b>WASD</b> MOVE</div><div><b>MOUSE</b> AIM</div><div><b>CLICK</b> ATTACK / FIRE</div>
-      <div><b>HOLD R-CLICK</b> SPRINT</div><div><b>TAP R-CLICK</b> DASH</div><div><b>SPACE</b> ROAR (STUN)</div>
+      <div><b>HOLD R-CLICK</b> SPRINT</div><div><b>TAP R-CLICK</b> DASH</div><div><b>K</b> FULL SCREEN</div><div><b>SPACE</b> ROAR (STUN)</div>
       <div><b>F</b> GROUND POUND</div><div><b>R</b> RHINO</div><div><b>1-5 / WHEEL</b> WEAPONS</div>
     </div>
     <div class="ctrls mob">
       <div><b>LEFT THUMB</b> MOVE (PUSH FAR = SPRINT)</div><div><b>RIGHT THUMB</b> AIM + FIRE</div>
-      <div><b>DASH / ROAR / POUND</b> BUTTONS</div><div><b>TAP WEAPONS</b> TO SWITCH</div>
+      <div><b>SPRINT</b> HOLD &bull; <b>DASH / ROAR / POUND</b> TAP</div><div><b>TAP WEAPONS</b> TO SWITCH</div>
     </div>
     <div id="rotateTip">↻ TURN YOUR PHONE SIDEWAYS FOR THE BEST VIEW</div>
     <div class="btn" id="startBtn">ENTER THE LAB</div>
+    <div class="btn ghost" id="fsTitleBtn">⛶ FULL SCREEN</div>
+    <div class="btn ghost" id="installBtn">⬇ INSTALL APP</div>
+    <div id="iosTip">TIP: TAP SHARE → "ADD TO HOME SCREEN" TO PLAY FULL SCREEN</div>
     <div class="tip">HEADPHONES RECOMMENDED &bull; LIGHTS OFF IF YOU DARE<span class="desk"> &bull; M = MUSIC &bull; N = ALL SOUND</span><span class="mob"> &bull; TURN OFF SILENT MODE FOR SOUND</span></div>
     <a class="more" href="https://samiam3d.com/games">&larr; MORE GAMES BY SAMIAM3D</a>
   </div>
@@ -1320,7 +1342,7 @@ function equip(w) {
 
 // ================================================================ TOUCH (twin-stick)
 const sticks = { L: { id: null, x: 0, y: 0, ox: 0, oy: 0, t: 0, el: $('stickL') }, R: { id: null, x: 0, y: 0, ox: 0, oy: 0, t: 0, el: $('stickR') } };
-let touchFire = false, touchTap = 0;
+let touchFire = false, touchTap = 0, sprintBtn = false;
 function assistAim(a, cone = 0.45) {
   // snap toward the hunter (or a live generator) if it's visible and roughly where you're pointing
   let best = a, bd = cone;
@@ -1366,12 +1388,59 @@ if (TOUCH) {
   };
   layer.addEventListener('pointerup', end); layer.addEventListener('pointercancel', end);
   const act = { ab_roar: () => roar(), ab_pound: () => groundPound(), ab_dash: () => dash(), ab_rhino: () => rhinoCharge() };
+  // SPRINT is hold-to-run
+  const sb = $('ab_sprint');
+  sb.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); sprintBtn = true; try { sb.setPointerCapture(e.pointerId); } catch (_) {} });
+  for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) sb.addEventListener(ev, () => { sprintBtn = false; });
   for (const id in act) $(id).addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); if (state === 'play') act[id](); });
   weapList.forEach(w => $('s_' + w).addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); if (state === 'play' && player.inv[w]) equip(w); }));
-  $('sndBtn').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); if (!AC) return; const m = Amb.toggleAll(); $('sndBtn').textContent = m ? '🔇' : '🔊'; });
   document.addEventListener('gesturestart', e => e.preventDefault());
   addEventListener('blur', () => { for (const k of ['L', 'R']) { sticks[k].id = null; sticks[k].x = sticks[k].y = 0; sticks[k].el.classList.remove('on'); } });
 }
+
+
+// ================================================================ FULL SCREEN + INSTALL (PWA)
+const fsEl = document.documentElement;
+const fsSupported = !!(fsEl.requestFullscreen || fsEl.webkitRequestFullscreen);
+const isInstalled = matchMedia('(display-mode: fullscreen)').matches || matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const fsActive = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+function enterFS() {
+  if (!fsSupported || fsActive()) return;
+  try {
+    const r = fsEl.requestFullscreen ? fsEl.requestFullscreen({ navigationUI: 'hide' }) : fsEl.webkitRequestFullscreen();
+    if (r && r.then) r.then(() => { if (TOUCH) screen.orientation?.lock?.('landscape').catch(() => {}); }).catch(() => {});
+  } catch (_) {}
+}
+function toggleFS() {
+  if (fsActive()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+  else enterFS();
+}
+function syncFS() {
+  const on = fsActive();
+  $('fsBtn').textContent = on ? '🗗' : '⛶';
+  $('fsBtn').title = on ? 'Exit full screen' : 'Full screen';
+  $('fsTitleBtn').textContent = on ? '⛶ EXIT FULL SCREEN' : '⛶ FULL SCREEN';
+}
+document.addEventListener('fullscreenchange', syncFS); document.addEventListener('webkitfullscreenchange', syncFS);
+if (fsSupported && !isInstalled) { $('fsTitleBtn').classList.add('show'); } else { $('fsBtn').classList.add('hide'); }
+const pressBtn = (el, fn) => el.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); fn(); });
+pressBtn($('fsBtn'), toggleFS);
+$('fsTitleBtn').addEventListener('click', toggleFS);
+$('sndBtn').addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); if (!AC) initAudio(); const m = Amb.toggleAll(); $('sndBtn').textContent = m ? '🔇' : '🔊'; });
+addEventListener('keydown', e => { if (e.code === 'KeyK') toggleFS(); });
+// Android / Chrome: offer a real "install app" button
+let installEvt = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; $('installBtn').classList.add('show'); });
+$('installBtn').addEventListener('click', async () => {
+  if (!installEvt) return;
+  installEvt.prompt(); try { await installEvt.userChoice; } catch (_) {}
+  installEvt = null; $('installBtn').classList.remove('show');
+});
+addEventListener('appinstalled', () => $('installBtn').classList.remove('show'));
+// iPhone/iPad Safari can't install from a button; tell people how
+if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !isInstalled) $('iosTip').classList.add('show');
+// offline support + installability
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 
 // ================================================================ FLOW FIELD (boss pathing)
 const flow = new Int16Array(W * H);
@@ -1522,7 +1591,7 @@ $('againBtn').onclick = () => {
 function startLevel(i) {
   buildLevel(i);
   checkpoint = JSON.stringify({ inv: player.inv, boots: player.boots, animals: player.animals });
-  Object.assign(player, { hp: 100, st: 100, keys: {}, cd: 0, roarCd: 0, poundCd: 0, dashCd: 0, rhinoCd: 0, dashT: 0, inv_t: 0, charge: 0, face: Math.PI });
+  Object.assign(player, { hp: 100, st: 100, winded: false, keys: {}, cd: 0, roarCd: 0, poundCd: 0, dashCd: 0, rhinoCd: 0, dashT: 0, inv_t: 0, charge: 0, face: Math.PI });
   player.vel.set(0, 0, 0); player.kb.set(0, 0, 0);
   for (const a of ['parrot', 'rhino', 'owl']) $('p_' + a).classList.toggle('got', !!player.animals[a]);
   $('ab_pound').classList.toggle('lock', !player.inv.hammer); $('ab_rhino').classList.toggle('lock', !player.animals.rhino);
@@ -1554,7 +1623,7 @@ function toNextFloor() {
 }
 $('startBtn').onclick = () => {
   initAudio(); SFX.click(); $('title').classList.add('hide');
-  if (TOUCH) { try { const r = document.documentElement.requestFullscreen?.({ navigationUI: 'hide' }); r && r.then(() => screen.orientation?.lock?.('landscape').catch(() => {})).catch(() => {}); } catch (_) {} }
+  if (TOUCH && !isInstalled) enterFS();
   showStory(0, () => startLevel(0));
 };
 
@@ -1713,7 +1782,12 @@ function updatePlayer(dt) {
   if (L.id !== null && lLen > 0.15) inp.set(L.x, 0, L.y);
   const moving = inp.lengthSq() > 0; if (moving) inp.normalize();
   const rmbSprint = rmbDown && performance.now() - rmbT >= RMB_TAP;
-  const sprint = (keys.ShiftLeft || keys.ShiftRight || rmbSprint || (L.id !== null && lLen > 0.92)) && moving && player.st > 0;
+  // running dry leaves you winded: no sprinting until stamina recovers to 35
+  if (player.st <= 0 && !player.winded) { player.winded = true; pop('WINDED!', player.pos.clone().setY(4), '#ff9aa8', 24, 0.9); }
+  if (player.winded && player.st >= 35) player.winded = false;
+  const wantSprint = keys.ShiftLeft || keys.ShiftRight || rmbSprint || sprintBtn || (L.id !== null && lLen > 0.92);
+  const sprint = wantSprint && moving && player.st > 0 && !player.winded;
+  player.sprinting = sprint;
   sticks.L.el.classList.toggle('sprint', L.id !== null && lLen > 0.92);
   player.st = clamp(player.st + (sprint ? -32 : 18) * dt, 0, 100);
   player.vel.lerp(inp.multiplyScalar(sprint ? 11 : 7), 1 - Math.exp(-dt * 14));
@@ -2021,14 +2095,29 @@ function updateAtmosphere(dt) {
   if (near < 20 && heartT <= 0) { const k = 1 - near / 20; heartT = lerp(1.1, 0.33, k); SFX.heart(0.15 + k * 0.5); $('vig').style.transition = 'none'; $('vig').style.opacity = 0.25 + k * 0.6; requestAnimationFrame(() => { $('vig').style.transition = 'opacity .35s'; $('vig').style.opacity = player.hp < 35 ? 0.4 : 0; }); }
   if (near >= 20) $('vig').style.opacity = player.hp < 35 ? 0.35 + Math.sin(T * 4) * 0.1 : 0;
 }
+const cdPrev = {};
+function cdv(id, v, max) {
+  const el = $(id), p = clamp(v / max, 0, 1);
+  el.style.setProperty('--p', p.toFixed(3));
+  el.querySelector('.t').textContent = v > 0.05 ? (v < 1 ? v.toFixed(1) : String(Math.ceil(v))) : '';
+  if (cdPrev[id] > 0.05 && v <= 0.05 && !el.classList.contains('lock')) { el.classList.remove('ready'); void el.offsetWidth; el.classList.add('ready'); }
+  cdPrev[id] = v;
+}
 function updateHUD() {
   $('hpI').style.width = player.hp + '%'; $('stI').style.width = player.st + '%';
   const sh = shielded();
   $('bossHp').style.width = (robot.hp / robot.maxHp * 100) + '%';
   $('bossBar').classList.toggle('shield', sh);
   $('bossShield').textContent = sh ? `SHIELDED — ${gens.filter(g => g.alive).length} GENERATOR${gens.filter(g => g.alive).length > 1 ? 'S' : ''} LEFT` : '';
-  const cdv = (id, v, max) => { $(id).querySelector('.cd').style.height = clamp(v / max, 0, 1) * 100 + '%'; };
   cdv('ab_roar', player.roarCd, 12); cdv('ab_pound', player.poundCd, 7); cdv('ab_dash', player.dashCd, 2); cdv('ab_rhino', player.rhinoCd, 9);
+  // sprint shows spent stamina as the sweep; when winded, the seconds until you can run again
+  const sbEl = $('ab_sprint');
+  sbEl.style.setProperty('--p', (1 - player.st / 100).toFixed(3));
+  sbEl.classList.toggle('winded', !!player.winded); sbEl.classList.toggle('on', !!player.sprinting);
+  const wait = player.winded ? (35 - player.st) / 18 : 0;
+  sbEl.querySelector('.t').textContent = wait > 0.05 ? wait.toFixed(1) : '';
+  if (sbEl.dataset.w === '1' && !player.winded) { sbEl.classList.remove('ready'); void sbEl.offsetWidth; sbEl.classList.add('ready'); }
+  sbEl.dataset.w = player.winded ? '1' : '0';
   mctx.fillStyle = '#0d0814'; mctx.fillRect(0, 0, mini.width, mini.height);
   for (let z = 0; z < H; z++) for (let x = 0; x < W; x++) {
     if (!explored[x + z * W]) continue;

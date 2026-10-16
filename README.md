@@ -21,13 +21,14 @@ python3 -m http.server 8000
 | WASD / arrows | Move |
 | Mouse | Aim (your headlamp follows the cursor) |
 | Click | Attack / fire (hold to charge the Mega Cannon) |
-| Hold right-click / Shift | Sprint |
+| Hold right-click / Shift | Sprint. Run out of stamina and you're winded until it recovers to 35% |
 | Tap right-click / Q | Dash, 2-second cooldown (boots make it go farther) |
 | Space | Roar: stuns the hunter if it's close |
 | F | Ground pound (needs the hammer) |
 | R | Rhino stampede (needs the rhino): smashes cracked walls and gores the hunter |
 | 1-5 / wheel | Switch weapons |
 | M / N | Toggle music / all sound |
+| K or ⛶ button | Full screen |
 
 ## Mobile
 
@@ -38,11 +39,18 @@ Touch devices get twin-stick controls automatically. Landscape is best, but port
 | Left thumb, drag anywhere on the left half | Move. Push to the edge to sprint |
 | Right thumb, drag anywhere on the right half | Aim and fire, with a little aim assist toward the hunter and generators |
 | Right thumb, quick tap | Single attack |
-| DASH / ROAR / POUND / RHINO buttons | Abilities |
+| SPRINT button | Hold to run (shows stamina; turns pink while you're winded) |
+| DASH / ROAR / POUND / RHINO buttons | Abilities. Each shows a countdown sweep and seconds until it's ready |
 | Weapon icons | Tap to switch |
 | 🔊 | Sound on/off |
 
-On iPhone, turn off silent mode to hear the audio. You can use "Add to Home Screen" to play it full-screen like an app.
+On iPhone, turn off silent mode to hear the audio.
+
+### Install as an app
+
+- **Android (Chrome):** tap **⬇ INSTALL APP** on the title screen, or use the browser menu → **Install app**. It installs with its own icon and opens full-screen in landscape, with no browser bars. It also works offline after the first visit.
+- **iPhone / iPad (Safari):** tap **Share → Add to Home Screen**.
+- **Any browser:** the **⛶** button (or K) toggles full screen.
 
 ## Floors
 
